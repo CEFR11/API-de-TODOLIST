@@ -2,6 +2,8 @@ package br.com.eduardoramos.todolist.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,17 +18,28 @@ public class UserController {
     private IUserReposity userReposity;
 
 @PostMapping("/")
-    public UserModel create(@RequestBody UserModel userModel){
+    public ResponseEntity create(@RequestBody UserModel userModel){
         var user = this.userReposity.findByUsername(userModel.getUsername());
         
         if(user != null){
-            System.out.println("Usuário já existe");
-            return null;
+            //Utilizandoo ResponseEntity para retornar repostas HTTP apropriadas
+            // Mensagem de erro
+             //Usei o BAD__REQUEST para indicar que o usuário ja existe.
+            
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário ja existe");
         }
 
         var userCreated = this.userReposity.save(userModel);
-        return userCreated;
+        return ResponseEntity.status(HttpStatus.CREATED).body(userCreated); 
+        // Utilizei HTTPStatus para definir o status code , e HttpStatus.CREATED para indicar que o usuario foi criado com sucesso
+        // .body para retorna o UserCreated
     }
 
 
+
 }
+
+//Utilizandoo ResponseEntity para retornar repostas HTTP apropriadas
+// Mensagem de erro
+//Status Code , que define se foi um sucesso se foi um erro , entao conseguimos retornar ele
+// Utilizei HTTPStatus para definir o status code , usei o BAD__REQUEST para indicar que o usuário ja existe.// e HttpStatus.CREATED para indicar que o usuario foi criado com sucesso.
