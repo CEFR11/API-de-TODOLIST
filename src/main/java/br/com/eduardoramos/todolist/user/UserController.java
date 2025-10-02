@@ -32,7 +32,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário ja existe");
         }
 
-        var passwordHashred = BCrypt.withDefaults() //Cryptogrando a senha do usuario com o Bcrypt 
+        var passwordHashred = BCrypt.withDefaults() //Criptografando a senha do usuario
         .hashToString(12, userModel.getPassword().toCharArray());
 
         userModel.setPassword(passwordHashred);
@@ -48,8 +48,3 @@ public class UserController {
 
 
 }
-
-//Utilizandoo ResponseEntity para retornar repostas HTTP apropriadas
-// Mensagem de erro
-//Status Code , que define se foi um sucesso se foi um erro , entao conseguimos retornar ele
-// Utilizei HTTPStatus para definir o status code , usei o BAD__REQUEST para indicar que o usuário ja existe.// e HttpStatus.CREATED para indicar que o usuario foi criado com sucesso.
